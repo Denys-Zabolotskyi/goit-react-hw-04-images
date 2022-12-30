@@ -1,10 +1,21 @@
-import { Component } from 'react';
+import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
+import { GalleryList, GalleryItem } from './ImageGallery.styled';
+import PropTypes from 'prop-types';
 
-export class ImageGallery extends Component {
-  state = {
-    images: [],
-  };
-  render() {
-    return <div>ImageGallery</div>;
-  }
-}
+export const ImageGallery = ({ items }) => {
+  return (
+    <GalleryList>
+      {items.map(({ id, ...restProps }) => (
+        <GalleryItem key={id}>
+          <ImageGalleryItem {...restProps} />
+        </GalleryItem>
+      ))}
+    </GalleryList>
+  );
+};
+
+ImageGallery.propTypes = {
+  items: PropTypes.arrayOf(
+    PropTypes.shape({ id: PropTypes.number.isRequired })
+  ),
+};
