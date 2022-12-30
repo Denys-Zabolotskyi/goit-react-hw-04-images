@@ -8,7 +8,7 @@ import { ImageGallery } from 'components/ImageGallery/ImageGallery';
 import { fetchImages } from 'Api/Api';
 import { Button } from 'components/Button/Button';
 import { NetflixLoader } from 'components/Loader/Loader';
-import { Modal } from 'components/Modal/Modal';
+// import { Modal } from 'components/Modal/Modal';
 
 export class App extends Component {
   state = {
@@ -49,7 +49,6 @@ export class App extends Component {
   };
 
   componentDidUpdate(_, prevState) {
-    // console.log(prevState.searchName);
     if (
       prevState.page !== this.state.page ||
       prevState.searchName !== this.state.searchName
@@ -74,7 +73,6 @@ export class App extends Component {
         ) : (
           ''
         )}
-        {/* <Modal /> */}
       </Layout>
     );
   }
