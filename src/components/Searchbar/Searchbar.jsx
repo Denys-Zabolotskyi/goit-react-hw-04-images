@@ -13,9 +13,6 @@ import {
 
 export const Searchbar = ({ onSubmit }) => {
   const [searchName, setSearchName] = useState('');
-  // state = {
-  //   searchName: '',
-  // };
 
   const handleNameChange = evt => {
     const target = evt.currentTarget.value.toLowerCase();
