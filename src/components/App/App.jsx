@@ -8,7 +8,6 @@ import { ImageGallery } from 'components/ImageGallery/ImageGallery';
 import { fetchImages } from 'Api/Api';
 import { Button } from 'components/Button/Button';
 import { NetflixLoader } from 'components/Loader/Loader';
-// import { Modal } from 'components/Modal/Modal';
 
 export class App extends Component {
   state = {
