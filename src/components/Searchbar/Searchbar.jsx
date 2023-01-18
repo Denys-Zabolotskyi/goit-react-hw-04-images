@@ -12,24 +12,24 @@ import {
 } from './Searchbar.styled';
 
 export const Searchbar = ({ onSubmit }) => {
-  const [searchName, setSearchName] = useState('');
+  const [inputSearchName, setInputSearchName] = useState('');
 
   const handleNameChange = evt => {
     const target = evt.currentTarget.value.toLowerCase();
-    setSearchName(target);
+    setInputSearchName(target);
   };
 
   const handleSubmit = evt => {
     evt.preventDefault();
-    if (searchName.trim() === '') {
+    if (inputSearchName.trim() === '') {
       toast.error('Please, enter search word!', {
         position: 'top-center',
         duration: 2000,
       });
       return;
     }
-    onSubmit(searchName);
-    setSearchName('');
+    onSubmit(inputSearchName);
+    setInputSearchName('');
   };
 
   return (
@@ -44,7 +44,7 @@ export const Searchbar = ({ onSubmit }) => {
           autocomplete="off"
           autoFocus
           placeholder="Search images and photos"
-          value={searchName}
+          value={inputSearchName}
           onChange={handleNameChange}
         />
       </SearchForm>

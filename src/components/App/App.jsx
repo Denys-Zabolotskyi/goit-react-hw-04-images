@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { useState, useEffect } from 'react';
 import { GlobalStyle } from './GlobalStyle';
 import { Toaster } from 'react-hot-toast';
 import { toast } from 'react-hot-toast';
@@ -9,70 +9,60 @@ import { fetchImages } from 'Api/Api';
 import { Button } from 'components/Button/Button';
 import { NetflixLoader } from 'components/Loader/Loader';
 
-export class App extends Component {
-  state = {
-    searchName: '',
-    page: 1,
-    items: [],
-    isLoading: false,
-  };
+export const App = () => {
+  const [searchName, setSearchName] = useState('');
+  const [page, setPage] = useState(1);
+  const [items, setItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  handleFormSubmit = searchName => {
-    // console.log(searchName);
-    this.setState({ searchName, items: [], page: 1 });
-  };
-
-  findImages = async () => {
-    try {
-      this.setState({ isLoading: true });
-      const images = await fetchImages(this.state.searchName, this.state.page);
-      // console.log(images);
-      images.length === 0
-        ? toast.error(
-            'Sorry! There is no photo with this name. Try something else!',
-            {
-              position: 'top-center',
-              duration: 2000,
-            }
-          )
-        : this.setState(prevState => ({
-            items: [...prevState.items, ...images],
-          }));
-    } catch (error) {
-      console.log(error);
-    } finally {
-      this.setState({
-        isLoading: false,
-      });
+  const handleFormSubmit = inputSearchName => {
+    if (inputSearchName !== searchName) {
+      setSearchName(inputSearchName);
+      setItems([]);
+      setPage(1);
+    } else {
+      setSearchName(inputSearchName);
     }
   };
 
-  componentDidUpdate(_, prevState) {
-    if (
-      prevState.page !== this.state.page ||
-      prevState.searchName !== this.state.searchName
-    ) {
-      this.findImages();
+  useEffect(() => {
+    if (!searchName) {
+      return;
     }
-  }
-  loadMore = () => {
-    this.setState(prevState => ({ page: prevState.page + 1 }));
-  };
-  render() {
-    const { items, isLoading } = this.state;
-    return (
-      <Layout>
-        <GlobalStyle />
-        <Searchbar onSubmit={this.handleFormSubmit} />
-        <Toaster />
-        <ImageGallery items={items} />
-        {isLoading && <NetflixLoader />}
-        {items.length % 2 === 0 && items.length !== 0 ? (
-          <Button onClick={this.loadMore} />
-        ) : (
-          ''
-        )}
-      </Layout>
-    );
-  }
-}
+    const findImages = async () => {
+      try {
+        setIsLoading(true);
+        const images = await fetchImages(searchName, page);
+        images.length === 0
+          ? toast.error(
+              'Sorry! There is no photo with this name. Try something else!',
+              {
+                position: 'top-center',
+                duration: 2000,
+              }
+            )
+          : setItems(items => [...items, ...images]);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    findImages();
+  }, [page, searchName]);
+
+  return (
+    <Layout>
+      <GlobalStyle />
+      <Searchbar onSubmit={handleFormSubmit} />
+      <Toaster />
+      <ImageGallery items={items} />
+      {isLoading && <NetflixLoader />}
+      {items.length % 2 === 0 && items.length !== 0 ? (
+        <Button onClick={() => setPage(() => page + 1)} />
+      ) : (
+        ''
+      )}
+    </Layout>
+  );
+};
