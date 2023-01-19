@@ -59,7 +59,7 @@ export const App = () => {
       <ImageGallery items={items} />
       {isLoading && <NetflixLoader />}
       {items.length % 2 === 0 && items.length !== 0 ? (
-        <Button onClick={() => setPage(() => page + 1)} />
+        <Button onClick={() => setPage(prevState => prevState + 1)} />
       ) : (
         ''
       )}
